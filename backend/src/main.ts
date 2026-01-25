@@ -6,6 +6,8 @@ async function bootstrap() {
   // ACTIVAR CORS: Esto permite que Angular pida datos
   app.enableCors(); 
 
-  await app.listen(3000);
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`Server is running on http://localhost:${port}`);
 }
 bootstrap();
