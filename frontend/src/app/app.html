@@ -1,0 +1,26 @@
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+  
+  <div class="bg-primary text-white py-2 text-center text-sm font-medium">
+    <p>🎉 ¡Oferta de bienvenida! ...</p>
+  </div>
+
+  <header class="sticky top-0 z-50 w-full ...">
+    <div class="container mx-auto flex ...">
+      <nav class="hidden md:flex items-center gap-6">
+        <a class="text-sm font-medium hover:text-primary transition-colors cursor-pointer" routerLink="/">Inicio</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors cursor-pointer" routerLink="/servicios">Servicios</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors cursor-pointer" href="#">Galería</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors cursor-pointer" href="#">Contacto</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors cursor-pointer" href="#">Sobre nosotros</a>
+      </nav>
+      
+      </div>
+  </header>
+
+  <main class="flex-grow">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-white dark:bg-background-dark border-t ...">
+    </footer>
+</div>

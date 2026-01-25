@@ -1,0 +1,38 @@
+<div class="bg-gray-100 min-h-screen p-8">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">Nuestros Servicios</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      @for (s of servicios(); track s._id) {
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all hover:scale-105">
+          <img [src]="s.image" class="w-full h-48 object-cover" [alt]="s.title">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">{{ s.title }}</h3>
+            <p class="text-gray-600 mb-4 h-20 overflow-hidden">{{ s.description }}</p>
+            
+            <div class="flex justify-between items-center border-t pt-4">
+              <span class="text-indigo-600 font-bold text-xl">{{ s.price }}€</span>
+              
+              <button (click)="abrirModal(s)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition cursor-pointer relative z-50">
+        Reservar
+      </button>
+              
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-span-full text-center py-10">
+          <p class="text-gray-500 text-lg">Cargando servicios...</p>
+        </div>
+      }
+      </div>
+  </div>
+</div>
+
+@if (servicioSeleccionado()) {
+  <app-reserva-modal 
+    [servicio]="servicioSeleccionado()" 
+    (close)="cerrarModal()">
+  </app-reserva-modal>
+}
