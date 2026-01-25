@@ -9,7 +9,7 @@ import { ReservasModule } from './reservas/reservas.module';
   imports: [
     // Conexión a la BD local llamada 'nesia-db'.
     // Si usas Docker o Atlas, cambiarás esta URL más adelante.
-    MongooseModule.forRoot('mongodb+srv://admin:admin123@nesia.gbqmzr5.mongodb.net/?appName=Nesia'), 
+    MongooseModule.forRoot('mongodb+srv://admin:admin123@nesia.gbqmzr5.mongodb.net/nesia?appName=Nesia'), 
     ServiciosModule,
     ReservasModule
   ],
