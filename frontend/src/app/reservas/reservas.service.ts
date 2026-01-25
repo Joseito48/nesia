@@ -16,4 +16,8 @@ export class ReservasService {
   crearReserva(datos: any): Observable<any> {
     return this.http.post(this.apiUrl, datos);
   }
+obtenerReservas(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
 }
