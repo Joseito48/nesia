@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ServiciosService {
-  private apiUrl = 'http://localhost:3000/servicios'; // La URL de tu API de NestJS
-
+  private apiUrl = 'https://nesia-backend.onrender.com/home'; // La URL de la API de NestJS en Render.com
   constructor(private http: HttpClient) { }
 
   getServicios(): Observable<any[]> {

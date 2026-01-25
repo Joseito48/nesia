@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'; // <--- 2. Para manejar la respuesta asíncro
 })
 export class ReservasService {
   // Asegúrate de que esta URL coincida con tu backend (puerto 3000)
-  private apiUrl = 'http://localhost:3000/reservas'; 
+  private apiUrl = 'https://nesia-backend.onrender.com/home'; 
 
   // <--- 3. Aquí inyectamos el cliente HTTP
   constructor(private http: HttpClient) { }
