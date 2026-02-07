@@ -17,6 +17,7 @@ export class ServiciosService {
     // Borramos lo que haya para no duplicar
     await this.servicioModel.deleteMany({});
     
+    // Datos iniciales para poblar la colección de servicios
     const datosIniciales = [
       {
         title: 'Detallado Exterior',

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReservasService } from '../reservas.service';
 import { ServiciosService } from '../../servicios/servicios.service';
-
+//  Componente para el modal de reserva, aquí se define el componente de Angular que se encargará de mostrar el formulario para realizar una reserva, este componente es reutilizable y puede ser utilizado tanto desde la página de inicio como desde la página de servicios. El componente recibe un servicio específico como input (opcional) y emite un evento de cierre cuando se completa la reserva o se cierra el modal. Utiliza Reactive Forms para manejar el formulario de reserva y realiza las peticiones al backend a través del servicio ReservasService.
 @Component({
   selector: 'app-reserva-modal',
   standalone: true,

@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ReservasService } from '../reservas/reservas.service';
 
+//  Componente para la página de administración, aquí se define el componente de Angular que se encargará de mostrar la lista de reservas realizadas, esta página es accesible solo para administradores y muestra información detallada de cada reserva, incluyendo el nombre del cliente, el servicio reservado, la fecha de la reserva y la fecha de creación. Utiliza una Signal para almacenar las reservas y otra para controlar el estado de carga mientras se obtienen los datos del backend a través del servicio ReservasService.
 @Component({
   selector: 'app-admin',
   standalone: true,

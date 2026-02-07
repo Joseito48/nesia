@@ -11,22 +11,7 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
-
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-
-/**
- * Serve static files from /browser
- */
+//  Servir los archivos estáticos de la carpeta 'browser' con una política de caché agresiva para mejorar el rendimiento, esto es especialmente importante para los recursos que no cambian frecuentemente como los archivos JavaScript, CSS e imágenes
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

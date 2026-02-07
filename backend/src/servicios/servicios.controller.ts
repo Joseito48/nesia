@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ServiciosService } from './servicios.service';
-
+// Controlador para la entidad Servicio, aquí se definen los endpoints relacionados con los servicios (CRUD y un endpoint especial para llenar la BD)
 @Controller('servicios')
 export class ServiciosController {
   constructor(private readonly serviciosService: ServiciosService) {}

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservasController } from './reservas.controller';
 import { ReservasService } from './reservas.service';
-
+// Prueba unitaria para el controlador de reservas, verifica que el controlador se defina correctamente
 describe('ReservasController', () => {
   let controller: ReservasController;
 

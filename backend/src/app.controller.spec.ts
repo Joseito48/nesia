@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
+// Prueba unitaria para el controlador principal de la aplicación, verifica que el endpoint de prueba funcione correctamente
 describe('AppController', () => {
   let appController: AppController;
 

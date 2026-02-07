@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ServiciosService } from './servicios.service';
-
+// Prueba unitaria para el servicio de servicios, verifica que el servicio se defina correctamente
 describe('ServiciosService', () => {
   let service: ServiciosService;
 
