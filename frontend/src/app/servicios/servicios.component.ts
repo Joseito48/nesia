@@ -7,7 +7,6 @@ import { ReservaModalComponent } from '../reservas/reserva-modal/reserva-modal.c
 @Component({
   selector: 'app-servicios',
   standalone: true,
-  // 2. IMPORTANTE: Añadirlo aquí
   imports: [CommonModule, ReservaModalComponent], 
   templateUrl: './servicios.component.html',
 })
@@ -30,7 +29,7 @@ export class ServiciosComponent implements OnInit {
     });
   }
 
-  // 4. Función para abrir (con CHIVATO en consola)
+  // 4. Función para abrir 
   abrirModal(servicio: any) {
     console.log('CLICK RECIBIDO. Abriendo modal para:', servicio.title);
     this.servicioSeleccionado.set(servicio); // Actualizamos la signal

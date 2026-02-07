@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose'; // <--- Importar
+import { MongooseModule } from '@nestjs/mongoose'; 
 import { ServiciosService } from './servicios.service';
 import { ServiciosController } from './servicios.controller';
-import { Servicio, ServicioSchema } from './entities/servicio.entity'; // <--- Importar tu entidad
+import { Servicio, ServicioSchema } from './entities/servicio.entity';
 
 @Module({
   imports: [
-    // Aquí registramos el esquema para que este módulo pueda guardar datos
+    // Esquema de Mongoose para el modelo Servicio
     MongooseModule.forFeature([{ name: Servicio.name, schema: ServicioSchema }]),
   ],
   controllers: [ServiciosController],

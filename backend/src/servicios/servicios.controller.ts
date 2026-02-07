@@ -16,7 +16,6 @@ export class ServiciosController {
     return this.serviciosService.findAll();
   }
 
-  // ... (El resto de métodos se quedan igual)
   @Post()
   create(@Body() createServicioDto: any) { return this.serviciosService.create(createServicioDto); }
   @Get(':id')

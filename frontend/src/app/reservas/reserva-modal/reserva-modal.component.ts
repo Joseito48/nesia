@@ -24,7 +24,7 @@ export class ReservaModalComponent implements OnInit {
     nombreCliente: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', Validators.required],
-    fecha: ['', Validators.required], // <-- FALTABA ESTA COMA
+    fecha: ['', Validators.required],
     servicioId: ['', Validators.required]
   });
 

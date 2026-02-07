@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <--- IMPRESCINDIBLE
+import { CommonModule } from '@angular/common'; 
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router'; // <--- Añadimos RouterLinkActive
 
 @Component({

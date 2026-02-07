@@ -11,7 +11,7 @@ export class ReservasService {
   private platformId = inject(PLATFORM_ID);
 
   private getApiUrl() {
-    // Protección para evitar el error "window is not defined"
+    // Protección para evitar el error "window is not defined" y disinguir entre entorno de desarrollo y producción
     if (isPlatformBrowser(this.platformId)) {
       return window.location.hostname === 'localhost' 
         ? 'http://localhost:3000/reservas' 

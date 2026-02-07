@@ -12,7 +12,7 @@ export class ServiciosService {
     return this.servicioModel.find().exec();
   }
 
-  // ¡TRUCO! Método para llenar la BD automáticamente
+  //Método para llenar la BD automáticamente
   async seed() {
     // Borramos lo que haya para no duplicar
     await this.servicioModel.deleteMany({});
@@ -59,7 +59,7 @@ export class ServiciosService {
     return this.servicioModel.insertMany(datosIniciales);
   }
 
-  // Métodos que generó NestJS (los dejamos por si acaso)
+  // Métodos que generó NestJS automáticamente, los puedes personalizar o eliminar si no los necesitas
   create(createServicioDto: any) { return 'This action adds a new servicio'; }
   findOne(id: number) { return `This action returns a #${id} servicio`; }
   update(id: number, updateServicioDto: any) { return `This action updates a #${id} servicio`; }
