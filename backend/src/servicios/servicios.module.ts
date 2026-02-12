@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'; // <--- Importar
 import { ServiciosService } from './servicios.service';
 import { ServiciosController } from './servicios.controller';
 import { Servicio, ServicioSchema } from './entities/servicio.entity'; // <--- Importar tu entidad
+import { CloudinaryService } from '../common/cloudinary/cloudinary.service'; // <--- Importar el servicio de Cloudinary
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { Servicio, ServicioSchema } from './entities/servicio.entity'; // <--- I
     MongooseModule.forFeature([{ name: Servicio.name, schema: ServicioSchema }]),
   ],
   controllers: [ServiciosController],
-  providers: [ServiciosService],
+  providers: [ServiciosService,
+   CloudinaryService], // <--- Agregar el servicio de Cloudinary a los providers
 })
 export class ServiciosModule {}
