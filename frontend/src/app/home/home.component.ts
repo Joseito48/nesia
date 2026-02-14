@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.component.html',
-  imports: [CommonModule, ReservaModalComponent, RouterLink]
+  imports: [CommonModule, ReservaModalComponent, RouterLink] // Importamos el modal y RouterLink para los enlaces
 })
 
 export class HomeComponent {
