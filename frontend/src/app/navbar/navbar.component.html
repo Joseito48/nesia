@@ -68,15 +68,14 @@
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         
         <a routerLink="/" (click)="closeMenu()" class="text-slate-300 hover:bg-slate-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-          🏠 Inicio
+          Inicio
         </a>
 
         <a routerLink="/servicios" (click)="closeMenu()" class="text-slate-300 hover:bg-slate-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-          ✨ Servicios
+          Servicios
         </a>
 
-         <a routerLink="/nosotros" routerLinkActive="text-indigo-400" 
-          class="hover:bg-slate-800 hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-bold transition-colors">
+         <a routerLink="/nosotros" (click)="closeMenu()" class="text-slate-300 hover:bg-slate-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
           Nosotros
         </a>
 
