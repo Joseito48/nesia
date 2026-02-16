@@ -1,24 +1,32 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core'; // Ya no hace falta OnInit
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../auth.service'; // <--- 1. Importar servicio
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive], // Importamos esto para que funcionen los enlaces
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
+  
 })
 export class NavbarComponent {
-  // Signal: false = cerrado, true = abierto
-  menuAbierto = signal<boolean>(false);
+  menuAbierto = signal(false);
+  
+  // 2. Hacemos el servicio "public" para poder usarlo en el HTML
+  constructor(public authService: AuthService) {}
 
-  // Función para el botón de hamburguesa
   toggleMenu() {
-    this.menuAbierto.update(valor => !valor);
+    this.menuAbierto.update(val => !val);
   }
 
-  // Función para cerrar el menú cuando hacemos clic en un enlace (UX vital en móviles)
   closeMenu() {
     this.menuAbierto.set(false);
+  }
+
+  logout() {
+    // 3. Delegamos el logout al servicio
+    this.authService.logout();
+    this.closeMenu();
   }
 }
