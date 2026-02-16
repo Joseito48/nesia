@@ -1,0 +1,43 @@
+<div class="bg-gray-50 min-h-screen py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        Galería de Proyectos
+      </h2>
+      <p class="mt-4 text-xl text-gray-500">
+        Resultados reales. Pasión por el detalle.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      @for (item of proyectos; track item.titulo) {
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+          
+          <img [src]="item.img" [alt]="item.titulo" 
+               class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500 ease-in-out">
+          
+          <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <div class="text-center p-4">
+              <p class="text-white font-bold text-lg">{{ item.titulo }}</p>
+              <span class="inline-block mt-2 px-3 py-1 bg-indigo-600 text-white text-xs rounded-full">
+                {{ item.categoria }}
+              </span>
+            </div>
+          </div>
+
+        </div>
+      }
+
+    </div>
+
+    <div class="mt-16 text-center">
+      <p class="text-gray-600 mb-6">¿Quieres que tu coche luzca así?</p>
+      <a routerLink="/servicios" class="inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full hover:bg-indigo-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+        Ver Servicios y Precios
+      </a>
+    </div>
+
+  </div>
+</div>
