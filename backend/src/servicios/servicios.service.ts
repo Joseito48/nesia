@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Servicio } from './entities/servicio.entity';
@@ -17,7 +17,15 @@ export class ServiciosService {
     const nuevoServicio = new this.servicioModel(createServicioDto);
     return nuevoServicio.save();
   }
-
+// Borrar un servicio de la base de datos
+  async delete(id: string): Promise<any> {
+    const borrado = await this.servicioModel.findByIdAndDelete(id);
+    if (!borrado) {
+      // Importa NotFoundException de '@nestjs/common' si te da error aquí
+      throw new NotFoundException('Servicio no encontrado'); 
+    }
+    return borrado;
+  }
   // 3. Seed 
   async seed() {
     await this.servicioModel.deleteMany({});

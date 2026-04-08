@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // Necesario para los inputs
+import { FormsModule } from '@angular/forms';
 import { ReservasService } from '../reservas/reservas.service';
 import { ServiciosService } from '../servicios/servicios.service';
 
@@ -16,13 +16,15 @@ export class AdminComponent implements OnInit {
   reservas = signal<any[]>([]);
   cargando = signal<boolean>(true);
   
-  // Signals para la imagen (estos se quedan como signals porque son reactivos)
+  // Para guardar la lista de servicios del catálogo
+  serviciosCatalogo = signal<any[]>([]);
+  
+  // Signals para la imagen
   imagenPreview = signal<string | null>(null);
   urlImagenCloudinary = signal<string>('');
   subiendoImagen = signal<boolean>(false);
   
   // --- VARIABLES NORMALES (Para el formulario) ---
-  // Las cambiamos a variables simples para evitar conflictos con ngModel
   nombreNuevoServicio: string = '';
   precioNuevoServicio: number | null = null;
 
@@ -31,6 +33,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarReservas();
+    this.cargarServicios(); // Llamamos al cargar servicios al inicio
   }
 
   cargarReservas() {
@@ -50,6 +53,30 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  //Obtener los servicios de Mongo
+  cargarServicios() {
+    this.serviciosService.getServicios().subscribe({
+      next: (data) => this.serviciosCatalogo.set(data),
+      error: (err) => console.error('Error al cargar catálogo:', err)
+    });
+  }
+
+  // Borrar un servicio
+  borrarServicio(id: string) {
+    if (confirm('¿Estás seguro de borrar este servicio del catálogo?')) {
+      this.serviciosService.borrarServicio(id).subscribe({
+        next: () => {
+          alert('Servicio borrado correctamente');
+          this.cargarServicios(); // Recargamos la lista
+        },
+        error: (err) => {
+          console.error('Error al borrar:', err);
+          alert('Error al borrar el servicio');
+        }
+      });
+    }
+  }
+
   // 1. Lógica de Subida de Imagen
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -65,9 +92,8 @@ export class AdminComponent implements OnInit {
       this.subiendoImagen.set(true);
       this.serviciosService.subirImagen(file).subscribe({
         next: (res) => {
-          this.urlImagenCloudinary.set(res.url); // Guardamos la URL de Cloudinary
+          this.urlImagenCloudinary.set(res.url); // Guardamos la URL
           this.subiendoImagen.set(false);
-          console.log('Imagen subida:', res.url);
         },
         error: (err) => {
           console.error('Error subida:', err);
@@ -80,27 +106,23 @@ export class AdminComponent implements OnInit {
 
   // 2. Guardar Servicio en MongoDB
   guardarServicio() {
-    // Validamos usando las variables normales (sin paréntesis)
     if (!this.nombreNuevoServicio || !this.precioNuevoServicio || !this.urlImagenCloudinary()) {
       alert('Por favor, rellena nombre, precio y espera a que se suba la imagen.');
       return;
     }
 
-    // CREAMOS EL OBJETO EXACTO QUE PIDE EL BACKEND
-    // El backend espera: title, price, image, description
     const nuevoServicio = {
-      title: this.nombreNuevoServicio,       // <--- Enviamos 'title'
-      description: 'Servicio creado desde Panel Admin', // Descripción por defecto
-      price: this.precioNuevoServicio,       // <--- Enviamos 'price'
-      image: this.urlImagenCloudinary()      // <--- Enviamos la URL de la imagen
+      title: this.nombreNuevoServicio,
+      description: 'Servicio creado desde Panel Admin',
+      price: this.precioNuevoServicio,
+      image: this.urlImagenCloudinary()
     };
-
-    console.log('Enviando datos:', nuevoServicio);
 
     this.serviciosService.crearServicio(nuevoServicio).subscribe({
       next: (res) => {
         alert('¡Servicio guardado con éxito!');
         this.limpiarFormulario();
+        this.cargarServicios(); // Recargamos la lista para ver el nuevo
       },
       error: (err) => {
         console.error('Error al guardar:', err);
@@ -110,15 +132,11 @@ export class AdminComponent implements OnInit {
   }
 
   limpiarFormulario() {
-    // Reseteamos variables
     this.nombreNuevoServicio = '';
     this.precioNuevoServicio = null;
-    
-    // Reseteamos signals
     this.imagenPreview.set(null);
     this.urlImagenCloudinary.set('');
     
-    // Limpiamos el input file visualmente
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
   }

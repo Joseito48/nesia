@@ -1,5 +1,5 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // <--- Añadimos HttpHeaders
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -21,24 +21,40 @@ export class ServiciosService {
     return 'https://nesia-backend.onrender.com/servicios';
   }
 
-  // Obtener todos los servicios (GET)
+  // --- NUEVA FUNCIÓN: Sacar el pase VIP (Token) del LocalStorage ---
+  private getHeaders(): HttpHeaders {
+    let token = 'false';
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('adminToken') || 'false';
+    }
+    // Devolvemos la cabecera formateada
+    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+  }
+
+  // Obtener todos los servicios (GET) - PÚBLICO (No lleva headers)
   getServicios(): Observable<any[]> {
     return this.http.get<any[]>(this.getApiUrl());
   }
 
-  // Subir imagen a Cloudinary (POST /upload)
+  // Subir imagen a Cloudinary (POST /upload) - PROTEGIDO 🔒
   subirImagen(file: File): Observable<{ url: string, public_id: string }> {
     const formData = new FormData();
     formData.append('file', file); 
 
     return this.http.post<{ url: string, public_id: string }>(
       `${this.getApiUrl()}/upload`, 
-      formData
+      formData,
+      { headers: this.getHeaders() } // <--- Mandamos el token
     );
   }
 
-  // Guardar el servicio completo en MongoDB (POST /servicios)
+  // Guardar el servicio completo en MongoDB (POST /servicios) - PROTEGIDO 🔒
   crearServicio(servicio: any): Observable<any> {
-    return this.http.post(this.getApiUrl(), servicio);
+    return this.http.post(this.getApiUrl(), servicio, { headers: this.getHeaders() }); // <--- Mandamos el token
+  }
+  
+  // Borrar un servicio (DELETE) - PROTEGIDO 🔒
+  borrarServicio(id: string): Observable<any> {
+    return this.http.delete(`${this.getApiUrl()}/${id}`, { headers: this.getHeaders() }); // <--- Mandamos el token
   }
 }
