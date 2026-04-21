@@ -1,23 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GaleriaComponent } from './galeria.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
-import { Galeria } from './galeria';
-
-describe('Galeria', () => {
-  let component: Galeria;
-  let fixture: ComponentFixture<Galeria>;
+describe('GaleriaComponent', () => {
+  let component: GaleriaComponent;
+  let fixture: ComponentFixture<GaleriaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Galeria]
-    })
-    .compileComponents();
+      imports: [GaleriaComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Galeria);
+    fixture = TestBed.createComponent(GaleriaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crear el componente de la galería', () => {
     expect(component).toBeTruthy();
   });
 });
