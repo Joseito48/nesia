@@ -1,17 +1,30 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose'; // <--- Importar esto
+import { ConfigModule } from '@nestjs/config'; // <--- Importamos el módulo de configuración
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServiciosModule } from './servicios/servicios.module';
 import { ReservasModule } from './reservas/reservas.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    // Conexión a la BD local llamada 'nesia-db'.
-    // Si usas Docker o Atlas, cambiarás esta URL más adelante.
-    MongooseModule.forRoot('mongodb+srv://admin:admin123@nesia.gbqmzr5.mongodb.net/nesia?appName=Nesia'), 
+    // 1. Iniciamos el ConfigModule para que lea el archivo .env
+    // El isGlobal: true permite que uses process.env en cualquier parte de la app sin volver a importarlo.
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    // 2. Conectamos a MongoDB usando la variable de entorno de forma asíncrona
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.MONGO_URI,
+      }),
+    }),
+    
     ServiciosModule,
-    ReservasModule
+    ReservasModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

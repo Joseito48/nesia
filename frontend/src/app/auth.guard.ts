@@ -1,19 +1,18 @@
 import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
   const router = inject(Router);
-  
-  // Verificamos si estamos en el navegador (para evitar errores de servidor)
-  if (typeof localStorage !== 'undefined') {
-    const token = localStorage.getItem('adminToken');
-    
-    if (token === 'true') {
-      return true; // Permitir acceso
-    }
-  }
 
-  // Si no hay token o no es navegador, redirigir al login
-  router.navigate(['/login']);
-  return false;
+  // Leemos la señal reactiva del AuthService que creamos antes
+  // Si devuelve true (porque hay un token JWT guardado), le abrimos la puerta
+  if (authService.isAdmin()) {
+    return true;
+  } else {
+    // Si no hay token, le bloqueamos el paso y lo mandamos al login (o al inicio)
+    router.navigate(['/login']);
+    return false;
+  }
 };

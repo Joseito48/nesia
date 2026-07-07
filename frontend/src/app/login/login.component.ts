@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service'; // <--- 1. Importar el servicio
+import { RouterLink, Router } from '@angular/router'; // <-- Añadido Router
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,18 +16,26 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  // 2. Inyectar el servicio en el constructor
-  constructor(private authService: AuthService) {}
+  // Inyectamos el AuthService y el Router para redirigir si el login es correcto
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   login() {
-    const USER_CORRECTO = 'admin';
-    const PASS_CORRECTO = 'Nesia2026';
+    // 1. Limpiamos mensajes de error anteriores
+    this.errorMessage = '';
 
-    if (this.username === USER_CORRECTO && this.password === PASS_CORRECTO) {
-      // 3. Usar el servicio para loguearse
-      this.authService.login(); 
-    } else {
-      this.errorMessage = 'Usuario o contraseña incorrectos 🚫';
-    }
+    // 2. Le pasamos los datos al servicio para que le pregunte al backend
+    this.authService.login(this.username, this.password).subscribe({
+      next: (respuestaServidor) => {
+        // Si el backend dice que todo está bien, entramos al panel
+        this.router.navigate(['/admin']); // Cambia la ruta a donde tengas tu panel
+      },
+      error: (error) => {
+        // Si el backend devuelve un error (ej. Error 401 Unauthorized)
+        this.errorMessage = 'Usuario o contraseña incorrectos 🚫';
+      }
+    });
   }
 }
