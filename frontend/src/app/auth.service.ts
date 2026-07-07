@@ -10,8 +10,10 @@ export class AuthService {
   // La señal reactiva sigue funcionando igual de bien
   isAdmin = signal<boolean>(this.checkToken());
 
-  // URL de tu backend en local (ajusta el puerto o la ruta si es distinta en NestJS)
-  private readonly API_URL = 'http://localhost:3000/auth/login';
+ // Si estamos en local usa localhost, si estamos en el servidor usa el dominio real
+private readonly API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/auth/login' 
+  : 'https://nesiadetailcar.es/api/auth/login';
 
   // Inyectamos el HttpClient para hacer peticiones al servidor
   constructor(private router: Router, private http: HttpClient) {}
