@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 @Module({
   imports: [
     JwtModule.registerAsync({
+      global:true,
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
