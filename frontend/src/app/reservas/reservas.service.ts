@@ -15,10 +15,10 @@ export class ReservasService {
     if (isPlatformBrowser(this.platformId)) {
       return window.location.hostname === 'localhost' 
         ? 'http://localhost:3000/reservas' 
-        : 'https://nesia-backend.onrender.com/reservas';
+        : 'https://nesiadetailcar.es/api/reservas';
     }
     // Fallback para el servidor (SSR)
-    return 'https://nesia-backend.onrender.com/reservas';
+    return 'https://nesiadetailcar.es/api/reservas';
   }
 
   crearReserva(datos: any): Observable<any> {

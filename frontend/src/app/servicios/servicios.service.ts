@@ -15,10 +15,10 @@ export class ServiciosService {
     if (isPlatformBrowser(this.platformId)) {
       return window.location.hostname === 'localhost' 
         ? 'http://localhost:3000/servicios' 
-        : 'https://nesia-backend.onrender.com/servicios';
+        : 'https://nesiadetailcar.es/api/servicios';
     }
     // 2. Fallback para entorno de servidor (SSR)
-    return 'https://nesia-backend.onrender.com/servicios';
+    return 'https://nesiadetailcar.es/apiservicios';
   }
 
   // --- NUEVA FUNCIÓN: Sacar el pase VIP (Token) del LocalStorage ---
