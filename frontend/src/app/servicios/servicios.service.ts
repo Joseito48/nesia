@@ -57,4 +57,7 @@ export class ServiciosService {
   borrarServicio(id: string): Observable<any> {
     return this.http.delete(`${this.getApiUrl()}/${id}`, { headers: this.getHeaders() }); // <--- Mandamos el token
   }
+  updateServicio(id: string, servicioActualizado: any): Observable<any> {
+    return this.http.put(`${this.getApiUrl()}/${id}`, servicioActualizado, { headers: this.getHeaders() });
+  }
 }

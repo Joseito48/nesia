@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, UseInterceptors, UploadedFile, Delete, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseInterceptors, UploadedFile, Delete, Param, UseGuards, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ServiciosService } from './servicios.service';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
 import { CreateServicioDto } from './dto/create-servicio.dto';
 import * as multer from 'multer';
 import { AuthGuard } from './auth.guard'; // <--- 1. IMPORTAMOS EL GUARD
+
 
 @Controller('servicios')
 export class ServiciosController {
@@ -50,4 +51,11 @@ export class ServiciosController {
   runSeed() {
     return this.serviciosService.seed();
   }
+
+// 6. ACTUALIZAR UN SERVICIO (PROTEGIDO 🔒)
+@UseGuards(AuthGuard)
+@Put(':id')
+update(@Param('id') id: string, @Body() updateData: any) {
+  return this.serviciosService.update(id, updateData);
+}
 }

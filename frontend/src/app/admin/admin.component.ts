@@ -15,18 +15,17 @@ export class AdminComponent implements OnInit {
   // --- SIGNALS (Para visualización y estado) ---
   reservas = signal<any[]>([]);
   cargando = signal<boolean>(true);
-  
-  // Para guardar la lista de servicios del catálogo
   serviciosCatalogo = signal<any[]>([]);
-  
-  // Signals para la imagen
   imagenPreview = signal<string | null>(null);
   urlImagenCloudinary = signal<string>('');
   subiendoImagen = signal<boolean>(false);
-  
-  // --- VARIABLES NORMALES (Para el formulario) ---
+
+  //--- VARIABLES PARA NUEVO SERVICIO ---
   nombreNuevoServicio: string = '';
   precioNuevoServicio: number | null = null;
+  descripcionNuevoServicio: string = '';
+  //--- VARIABLE PARA EDICIÓN DE SERVICIO ---
+  servicioEnEdicionId: string | null = null;
 
   private reservasService = inject(ReservasService);
   private serviciosService = inject(ServiciosService);
@@ -46,6 +45,7 @@ export class AdminComponent implements OnInit {
         this.reservas.set(ordenadas);
         this.cargando.set(false);
       },
+
       error: (err) => {
         console.error('Error al cargar reservas:', err);
         this.cargando.set(false);
@@ -77,6 +77,22 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  // <--- Función para rellenar el formulario al editar --->
+  editarServicio(servicio: any) {
+    this.servicioEnEdicionId = servicio._id;
+    this.nombreNuevoServicio = servicio.title;
+    this.precioNuevoServicio = servicio.price;
+    this.descripcionNuevoServicio = servicio.description; // Rellenamos la descripción
+    this.urlImagenCloudinary.set(servicio.image);
+    this.imagenPreview.set(servicio.image); // Mostramos la foto actual
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Subimos al principio
+  }
+  // <---Función para cancelar la edición --->
+  cancelarEdicion() {
+    this.limpiarFormulario();
+  }
+
   // 1. Lógica de Subida de Imagen
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -105,35 +121,54 @@ export class AdminComponent implements OnInit {
   }
 
   // 2. Guardar Servicio en MongoDB
-  guardarServicio() {
+guardarServicio() {
     if (!this.nombreNuevoServicio || !this.precioNuevoServicio || !this.urlImagenCloudinary()) {
-      alert('Por favor, rellena nombre, precio y espera a que se suba la imagen.');
+      alert('Por favor, rellena nombre, precio, descripción y espera a que se suba la imagen.');
       return;
     }
 
-    const nuevoServicio = {
+    const datosServicio = {
       title: this.nombreNuevoServicio,
-      description: 'Servicio creado desde Panel Admin',
+      description: this.descripcionNuevoServicio || 'Servicio creado desde Panel Admin', // Usamos la nueva variable
       price: this.precioNuevoServicio,
       image: this.urlImagenCloudinary()
     };
 
-    this.serviciosService.crearServicio(nuevoServicio).subscribe({
-      next: (res) => {
-        alert('¡Servicio guardado con éxito!');
-        this.limpiarFormulario();
-        this.cargarServicios(); // Recargamos la lista para ver el nuevo
-      },
-      error: (err) => {
-        console.error('Error al guardar:', err);
-        alert('Error al guardar en la base de datos. Revisa la consola.');
-      }
-    });
+    if (this.servicioEnEdicionId) {
+      // MODO EDICIÓN
+      this.serviciosService.updateServicio(this.servicioEnEdicionId, datosServicio).subscribe({
+        next: () => {
+          alert('¡Servicio actualizado con éxito!');
+          this.limpiarFormulario();
+          this.cargarServicios();
+        },
+        error: (err) => {
+          console.error('Error al actualizar:', err);
+          alert('Error al actualizar en la base de datos.');
+        }
+      });
+    } else {
+      // MODO CREACIÓN
+      this.serviciosService.crearServicio(datosServicio).subscribe({
+        next: (res) => {
+          alert('¡Servicio guardado con éxito!');
+          this.limpiarFormulario();
+          this.cargarServicios();
+        },
+        error: (err) => {
+          console.error('Error al guardar:', err);
+          alert('Error al guardar en la base de datos.');
+        }
+      });
+    }
   }
 
+  // <--- ACTUALIZADO: Limpiamos la descripción y el estado de edición --->
   limpiarFormulario() {
+    this.servicioEnEdicionId = null; 
     this.nombreNuevoServicio = '';
     this.precioNuevoServicio = null;
+    this.descripcionNuevoServicio = '';
     this.imagenPreview.set(null);
     this.urlImagenCloudinary.set('');
     

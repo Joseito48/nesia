@@ -26,6 +26,19 @@ export class ServiciosService {
     }
     return borrado;
   }
+  async update(id: string, updateData: any) {
+  // El { new: true } le dice a Mongoose que nos devuelva el objeto ya actualizado
+  const servicioActualizado = await this.servicioModel.findByIdAndUpdate(
+    id, 
+    updateData, 
+    { new: true }
+  ).exec();
+
+  if (!servicioActualizado) {
+    throw new NotFoundException(`El servicio con id ${id} no existe`);
+  }
+  return servicioActualizado;
+}
   // 3. Seed 
   async seed() {
     await this.servicioModel.deleteMany({});
@@ -54,6 +67,5 @@ export class ServiciosService {
 
   // Métodos extra (opcionales)
   findOne(id: number) { return `This action returns a #${id} servicio`; }
-  update(id: number, updateServicioDto: any) { return `This action updates a #${id} servicio`; }
   remove(id: number) { return `This action removes a #${id} servicio`; }
 }
