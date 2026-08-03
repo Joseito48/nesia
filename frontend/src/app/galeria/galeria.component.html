@@ -1,43 +1,32 @@
-<div class="bg-gray-50 min-h-screen py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-        Galería de Proyectos
-      </h2>
-      <p class="mt-4 text-xl text-gray-500">
-        Resultados reales. Pasión por el detalle.
-      </p>
+<div class="min-h-screen bg-nesia-light py-12">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-12 text-center">
+      <h2 class="text-3xl font-semibold tracking-[-0.02em] text-nesia-dark sm:text-4xl">Galería de Proyectos</h2>
+      <p class="mt-4 text-xl text-nesia-muted">Resultados reales. Pasión por el detalle.</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       @for (item of proyectos; track item.titulo) {
-        <div class="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
-          
-          <img [src]="item.img" [alt]="item.titulo" 
-               class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500 ease-in-out">
-          
-          <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
-            <div class="text-center p-4">
-              <p class="text-white font-bold text-lg">{{ item.titulo }}</p>
-              <span class="inline-block mt-2 px-3 py-1 bg-indigo-600 text-white text-xs rounded-full">
+        <div class="group relative cursor-pointer overflow-hidden rounded-[2rem] border border-nesia-border bg-nesia-card shadow-nesia-soft">
+          <img [src]="item.img" [alt]="item.titulo" class="h-80 w-full object-cover transition duration-500 ease-in-out group-hover:scale-110">
+
+          <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition duration-300 group-hover:opacity-100">
+            <div class="p-4 text-center">
+              <p class="text-lg font-semibold text-white">{{ item.titulo }}</p>
+              <span class="mt-2 inline-block rounded-full border border-white/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
                 {{ item.categoria }}
               </span>
             </div>
           </div>
-
         </div>
       }
-
     </div>
 
     <div class="mt-16 text-center">
-      <p class="text-gray-600 mb-6">¿Quieres que tu coche luzca así?</p>
-      <a routerLink="/servicios" class="inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full hover:bg-indigo-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+      <p class="mb-6 text-nesia-muted">¿Quieres que tu coche luzca así?</p>
+      <a routerLink="/servicios" class="btn-outline">
         Ver Servicios y Precios
       </a>
     </div>
-
   </div>
 </div>

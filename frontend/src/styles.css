@@ -2,3 +2,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-nesia-light text-nesia-dark antialiased;
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .card-surface {
+    @apply rounded-[2rem] border border-nesia-border bg-nesia-card shadow-nesia-soft;
+  }
+
+  .section-title {
+    @apply text-3xl font-semibold tracking-[-0.02em] text-nesia-dark sm:text-4xl;
+  }
+
+  .section-copy {
+    @apply mt-4 text-lg text-nesia-muted;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-full border border-nesia-dark px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-nesia-dark transition-all duration-300 hover:border-nesia-blue hover:text-nesia-blue;
+  }
+
+  .link-line {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:scale-x-0 after:bg-nesia-blue after:transition-transform after:duration-300 hover:after:scale-x-100;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border border-nesia-border bg-nesia-light px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-nesia-muted;
+  }
+}
