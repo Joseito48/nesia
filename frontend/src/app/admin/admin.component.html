@@ -256,6 +256,100 @@
           </table>
         </div>
       </div>
+
+      <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+        <h3 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+          🖼️ Galería de Trabajos
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-1">Imagen del trabajo</label>
+              <input
+                id="galeriaFileInput"
+                type="file"
+                (change)="onGaleriaFileSelected($event)"
+                accept="image/*"
+                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer border border-slate-200 rounded-lg p-1"
+              >
+            </div>
+
+            @if (imagenGaleriaPreview()) {
+              <div class="relative h-48 overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-100">
+                <img [src]="imagenGaleriaPreview()" class="h-full w-full object-cover" />
+              </div>
+            }
+
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-1">Título</label>
+              <input
+                type="text"
+                [(ngModel)]="tituloNuevaGaleria"
+                [ngModelOptions]="{standalone: true}"
+                class="w-full rounded-lg border border-slate-200 p-2 outline-none focus:ring-2 focus:ring-slate-500"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-1">Categoría</label>
+              <input
+                type="text"
+                [(ngModel)]="categoriaNuevaGaleria"
+                [ngModelOptions]="{standalone: true}"
+                class="w-full rounded-lg border border-slate-200 p-2 outline-none focus:ring-2 focus:ring-slate-500"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-1">Descripción</label>
+              <textarea
+                [(ngModel)]="descripcionNuevaGaleria"
+                [ngModelOptions]="{standalone: true}"
+                rows="3"
+                class="w-full rounded-lg border border-slate-200 p-2 outline-none focus:ring-2 focus:ring-slate-500"
+              ></textarea>
+            </div>
+
+            <div class="flex gap-2">
+              <button
+                (click)="subirGaleria()"
+                [disabled]="subiendoGaleria()"
+                class="flex-1 rounded-xl bg-slate-800 px-4 py-2 font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+              >
+                @if (subiendoGaleria()) {
+                  Subiendo...
+                } @else {
+                  Subir a la galería
+                }
+              </button>
+
+              <button
+                (click)="limpiarGaleria()"
+                class="rounded-xl border border-slate-300 bg-slate-100 px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-200"
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            @for (item of galeriaItems(); track item._id) {
+              <div class="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <img [src]="item.image" class="h-16 w-16 rounded-lg object-cover" />
+                <div class="min-w-0 flex-1">
+                  <p class="font-semibold text-slate-700">{{ item.title }}</p>
+                  <p class="text-sm text-slate-500">{{ item.category }}</p>
+                </div>
+              </div>
+            } @empty {
+              <p class="rounded-xl border border-dashed border-slate-300 p-6 text-center text-slate-500">
+                Aún no hay imágenes en la galería.
+              </p>
+            }
+          </div>
+        </div>
+      </div>
       
   </div>
 </div>

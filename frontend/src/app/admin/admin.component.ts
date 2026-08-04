@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReservasService } from '../reservas/reservas.service';
 import { ServiciosService } from '../servicios/servicios.service';
+import { GaleriaService } from '../galeria/galeria.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,6 +17,7 @@ export class AdminComponent implements OnInit {
   reservas = signal<any[]>([]);
   cargando = signal<boolean>(true);
   serviciosCatalogo = signal<any[]>([]);
+  galeriaItems = signal<any[]>([]);
   imagenPreview = signal<string | null>(null);
   urlImagenCloudinary = signal<string>('');
   subiendoImagen = signal<boolean>(false);
@@ -24,15 +26,24 @@ export class AdminComponent implements OnInit {
   nombreNuevoServicio: string = '';
   precioNuevoServicio: number | null = null;
   descripcionNuevoServicio: string = '';
+  tituloNuevaGaleria: string = '';
+  categoriaNuevaGaleria: string = '';
+  descripcionNuevaGaleria: string = '';
+  imagenGaleriaPreview = signal<string | null>(null);
+  urlImagenGaleria = signal<string>('');
+  subiendoGaleria = signal<boolean>(false);
+  archivoGaleriaSeleccionado = signal<File | null>(null);
   //--- VARIABLE PARA EDICIÓN DE SERVICIO ---
   servicioEnEdicionId: string | null = null;
 
   private reservasService = inject(ReservasService);
   private serviciosService = inject(ServiciosService);
+  private galeriaService = inject(GaleriaService);
 
   ngOnInit(): void {
     this.cargarReservas();
-    this.cargarServicios(); // Llamamos al cargar servicios al inicio
+    this.cargarServicios();
+    this.cargarGaleria();
   }
 
   cargarReservas() {
@@ -58,6 +69,13 @@ export class AdminComponent implements OnInit {
     this.serviciosService.getServicios().subscribe({
       next: (data) => this.serviciosCatalogo.set(data),
       error: (err) => console.error('Error al cargar catálogo:', err)
+    });
+  }
+
+  cargarGaleria() {
+    this.galeriaService.getGaleria().subscribe({
+      next: (data) => this.galeriaItems.set(data),
+      error: (err) => console.error('Error al cargar galería:', err)
     });
   }
 
@@ -120,6 +138,49 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  onGaleriaFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.archivoGaleriaSeleccionado.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.imagenGaleriaPreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  subirGaleria() {
+    const file = this.archivoGaleriaSeleccionado();
+    if (!file) {
+      alert('Selecciona una imagen antes de subirla.');
+      return;
+    }
+
+    if (!this.tituloNuevaGaleria || !this.categoriaNuevaGaleria) {
+      alert('Añade un título y una categoría para la imagen.');
+      return;
+    }
+
+    this.subiendoGaleria.set(true);
+    this.galeriaService.subirImagen(file, {
+      title: this.tituloNuevaGaleria,
+      description: this.descripcionNuevaGaleria,
+      category: this.categoriaNuevaGaleria
+    }).subscribe({
+      next: () => {
+        this.subiendoGaleria.set(false);
+        alert('¡Imagen añadida a la galería!');
+        this.limpiarGaleria();
+        this.cargarGaleria();
+      },
+      error: (err) => {
+        console.error('Error subiendo galería:', err);
+        this.subiendoGaleria.set(false);
+        alert('Error al subir la imagen a la galería.');
+      }
+    });
+  }
+
   // 2. Guardar Servicio en MongoDB
 guardarServicio() {
     if (!this.nombreNuevoServicio || !this.precioNuevoServicio || !this.urlImagenCloudinary()) {
@@ -173,6 +234,18 @@ guardarServicio() {
     this.urlImagenCloudinary.set('');
     
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  limpiarGaleria() {
+    this.tituloNuevaGaleria = '';
+    this.categoriaNuevaGaleria = '';
+    this.descripcionNuevaGaleria = '';
+    this.imagenGaleriaPreview.set(null);
+    this.urlImagenGaleria.set('');
+    this.archivoGaleriaSeleccionado.set(null);
+
+    const fileInput = document.getElementById('galeriaFileInput') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
   }
 }

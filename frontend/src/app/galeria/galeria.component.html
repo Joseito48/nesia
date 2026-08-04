@@ -6,18 +6,22 @@
     </div>
 
     <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      @for (item of proyectos; track item.titulo) {
+      @for (item of proyectos(); track item._id) {
         <div class="group relative cursor-pointer overflow-hidden rounded-[2rem] border border-nesia-border bg-nesia-card shadow-nesia-soft">
-          <img [src]="item.img" [alt]="item.titulo" class="h-80 w-full object-cover transition duration-500 ease-in-out group-hover:scale-110">
+          <img [src]="item.image" [alt]="item.title" class="h-80 w-full object-cover transition duration-500 ease-in-out group-hover:scale-110">
 
           <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition duration-300 group-hover:opacity-100">
             <div class="p-4 text-center">
-              <p class="text-lg font-semibold text-white">{{ item.titulo }}</p>
+              <p class="text-lg font-semibold text-white">{{ item.title }}</p>
               <span class="mt-2 inline-block rounded-full border border-white/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                {{ item.categoria }}
+                {{ item.category }}
               </span>
             </div>
           </div>
+        </div>
+      } @empty {
+        <div class="col-span-full rounded-[2rem] border border-dashed border-nesia-border bg-nesia-card p-10 text-center text-nesia-muted">
+          La galería aún no tiene imágenes cargadas.
         </div>
       }
     </div>
