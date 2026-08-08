@@ -15,6 +15,9 @@ export class Reserva extends Document {
   @Prop({ required: true })
   servicioId: string; // El ID del servicio que eligió
 
+  @Prop()
+  nombreServicio: string;
+
   @Prop({ required: true })
   fecha: string;
 }

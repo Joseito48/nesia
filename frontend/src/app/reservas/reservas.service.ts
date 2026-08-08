@@ -28,4 +28,8 @@ export class ReservasService {
   obtenerReservas(): Observable<any[]> {
     return this.http.get<any[]>(this.getApiUrl());
   }
+
+  borrarReserva(id: string): Observable<any> {
+    return this.http.delete(`${this.getApiUrl()}/${id}`);
+  }
 }

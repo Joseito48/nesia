@@ -27,4 +27,8 @@ export class ReservasService {
   async findAll() {
     return this.reservaModel.find().exec();
   }
+
+  async remove(id: string) {
+    return this.reservaModel.findByIdAndDelete(id).exec();
+  }
 }

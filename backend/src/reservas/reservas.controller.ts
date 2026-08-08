@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
 import { ReservasService } from './reservas.service';
 // Si tienes un DTO definido úsalo, si no, usaremos 'any' por ahora para simplificar
 // import { CreateReservaDto } from './dto/create-reserva.dto';
@@ -15,5 +15,10 @@ export class ReservasController {
   @Get()
   findAll() {
     return this.reservasService.findAll();
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.reservasService.remove(id);
   }
 }

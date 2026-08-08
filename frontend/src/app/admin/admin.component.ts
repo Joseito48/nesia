@@ -95,6 +95,21 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  borrarReserva(id: string) {
+    if (confirm('¿Seguro que quieres eliminar esta cita?')) {
+      this.reservasService.borrarReserva(id).subscribe({
+        next: () => {
+          alert('Cita eliminada correctamente');
+          this.cargarReservas();
+        },
+        error: (err) => {
+          console.error('Error al borrar la reserva:', err);
+          alert('No se pudo eliminar la cita.');
+        }
+      });
+    }
+  }
+
   // <--- Función para rellenar el formulario al editar --->
   editarServicio(servicio: any) {
     this.servicioEnEdicionId = servicio._id;
