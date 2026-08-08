@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ReservasService } from '../reservas/reservas.service';
 import { ServiciosService } from '../servicios/servicios.service';
 import { GaleriaService } from '../galeria/galeria.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
@@ -18,6 +19,7 @@ export class AdminComponent implements OnInit {
   cargando = signal<boolean>(true);
   serviciosCatalogo = signal<any[]>([]);
   galeriaItems = signal<any[]>([]);
+  reviews = signal<any[]>([]);
   imagenPreview = signal<string | null>(null);
   urlImagenCloudinary = signal<string>('');
   subiendoImagen = signal<boolean>(false);
@@ -39,11 +41,13 @@ export class AdminComponent implements OnInit {
   private reservasService = inject(ReservasService);
   private serviciosService = inject(ServiciosService);
   private galeriaService = inject(GaleriaService);
+  private http = inject(HttpClient);
 
   ngOnInit(): void {
     this.cargarReservas();
     this.cargarServicios();
     this.cargarGaleria();
+    this.cargarReviews();
   }
 
   cargarReservas() {
@@ -79,6 +83,13 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  cargarReviews() {
+    this.http.get<any[]>('http://localhost:3000/reviews').subscribe({
+      next: (data) => this.reviews.set(data),
+      error: (err) => console.error('Error al cargar reseñas:', err)
+    });
+  }
+
   // Borrar un servicio
   borrarServicio(id: string) {
     if (confirm('¿Estás seguro de borrar este servicio del catálogo?')) {
@@ -105,6 +116,21 @@ export class AdminComponent implements OnInit {
         error: (err) => {
           console.error('Error al borrar la reserva:', err);
           alert('No se pudo eliminar la cita.');
+        }
+      });
+    }
+  }
+
+  borrarReview(id: string) {
+    if (confirm('¿Quieres eliminar esta reseña?')) {
+      this.http.delete(`http://localhost:3000/reviews/${id}`).subscribe({
+        next: () => {
+          alert('Reseña eliminada correctamente');
+          this.cargarReviews();
+        },
+        error: (err) => {
+          console.error('Error al borrar reseña:', err);
+          alert('No se pudo eliminar la reseña.');
         }
       });
     }

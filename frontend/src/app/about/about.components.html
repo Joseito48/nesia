@@ -3,7 +3,7 @@
     <div class="text-center">
       <p class="text-base font-semibold uppercase tracking-[0.3em] text-nesia-blue">Reseñas de clientes</p>
       <h1 class="mt-2 text-4xl font-black tracking-[-0.03em] text-nesia-dark sm:text-5xl lg:text-6xl">Lo que dicen quienes nos eligen</h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-nesia-muted">Esta página está preparada para mostrar testimonios reales, y también para conectar con Google Reviews o un formulario de captación de opiniones.</p>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-nesia-muted">Aquí se muestran reseñas reales enviadas desde el formulario de la web, y también quedan registradas en el panel de administración.</p>
 
       <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
         <a href="https://search.google.com/" target="_blank" rel="noopener noreferrer" class="btn-outline sm:w-auto">Dejar reseña en Google</a>
@@ -16,32 +16,20 @@
 <section class="pb-16 sm:pb-24">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid gap-6 lg:grid-cols-3">
-      <article class="card-surface p-6">
-        <div class="text-2xl text-nesia-blue">★★★★★</div>
-        <p class="mt-4 text-sm leading-7 text-nesia-muted">“El coche quedó impecable. El acabado, la limpieza y el trato fueron excelentes. Se nota que cuidan cada detalle.”</p>
-        <div class="mt-6">
-          <p class="font-semibold text-nesia-dark">María G.</p>
-          <p class="text-sm text-nesia-muted">Cliente premium</p>
+      @for (review of reviews; track review._id) {
+        <article class="card-surface p-6">
+          <div class="text-2xl text-nesia-blue">{{ '★'.repeat(review.rating) }}</div>
+          <p class="mt-4 text-sm leading-7 text-nesia-muted">“{{ review.comment }}”</p>
+          <div class="mt-6">
+            <p class="font-semibold text-nesia-dark">{{ review.name }}</p>
+            <p class="text-sm text-nesia-muted">Cliente verificado</p>
+          </div>
+        </article>
+      } @empty {
+        <div class="lg:col-span-3 rounded-2xl border border-dashed border-nesia-border bg-white p-8 text-center text-nesia-muted">
+          Aún no hay reseñas publicadas. Sé el primero en dejar una opinión.
         </div>
-      </article>
-
-      <article class="card-surface p-6">
-        <div class="text-2xl text-nesia-blue">★★★★★</div>
-        <p class="mt-4 text-sm leading-7 text-nesia-muted">“Muy profesional, rápido y con un resultado que parecía de showroom. Lo recomiendo totalmente.”</p>
-        <div class="mt-6">
-          <p class="font-semibold text-nesia-dark">Carlos R.</p>
-          <p class="text-sm text-nesia-muted">Reserva de mantenimiento</p>
-        </div>
-      </article>
-
-      <article class="card-surface p-6">
-        <div class="text-2xl text-nesia-blue">★★★★★</div>
-        <p class="mt-4 text-sm leading-7 text-nesia-muted">“Lo mejor para cuidar el coche. El resultado superó mis expectativas y el trato fue muy cercano.”</p>
-        <div class="mt-6">
-          <p class="font-semibold text-nesia-dark">Laura P.</p>
-          <p class="text-sm text-nesia-muted">Cliente recurrente</p>
-        </div>
-      </article>
+      }
     </div>
   </div>
 </section>
@@ -62,19 +50,32 @@
       </div>
 
       <div class="rounded-[2rem] border border-nesia-border bg-white p-8 shadow-nesia-soft">
-        <h3 class="text-xl font-semibold text-nesia-dark">Formulario de ejemplo</h3>
-        <p class="mt-2 text-sm leading-7 text-nesia-muted">Este bloque puede convertirse en un formulario real cuando lo necesites.</p>
+        <h3 class="text-xl font-semibold text-nesia-dark">Deja tu opinión</h3>
+        <p class="mt-2 text-sm leading-7 text-nesia-muted">Tu reseña se guardará en el backend y aparecerá en esta página. También estará disponible para el administrador.</p>
 
         <div class="mt-6 space-y-4">
           <div>
             <label class="mb-1 block text-sm font-medium text-nesia-dark">Nombre</label>
-            <input type="text" class="w-full rounded-xl border border-nesia-border px-4 py-3 text-sm outline-none focus:border-nesia-blue" placeholder="Tu nombre" />
+            <input type="text" [(ngModel)]="name" name="name" class="w-full rounded-xl border border-nesia-border px-4 py-3 text-sm outline-none focus:border-nesia-blue" placeholder="Tu nombre" />
+          </div>
+          <div>
+            <label class="mb-1 block text-sm font-medium text-nesia-dark">Puntuación</label>
+            <select [(ngModel)]="rating" name="rating" class="w-full rounded-xl border border-nesia-border px-4 py-3 text-sm outline-none focus:border-nesia-blue">
+              <option [ngValue]="5">5 estrellas</option>
+              <option [ngValue]="4">4 estrellas</option>
+              <option [ngValue]="3">3 estrellas</option>
+              <option [ngValue]="2">2 estrellas</option>
+              <option [ngValue]="1">1 estrella</option>
+            </select>
           </div>
           <div>
             <label class="mb-1 block text-sm font-medium text-nesia-dark">Opinión</label>
-            <textarea rows="4" class="w-full rounded-xl border border-nesia-border px-4 py-3 text-sm outline-none focus:border-nesia-blue" placeholder="Cuéntanos tu experiencia..."></textarea>
+            <textarea rows="4" [(ngModel)]="comment" name="comment" class="w-full rounded-xl border border-nesia-border px-4 py-3 text-sm outline-none focus:border-nesia-blue" placeholder="Cuéntanos tu experiencia..."></textarea>
           </div>
-          <button class="btn-outline w-full justify-center">Enviar opinión</button>
+          <button type="button" (click)="submitReview()" [disabled]="submitting" class="btn-outline w-full justify-center disabled:opacity-60">{{ submitting ? 'Enviando...' : 'Enviar opinión' }}</button>
+          @if (message) {
+            <p class="text-sm text-nesia-blue">{{ message }}</p>
+          }
         </div>
       </div>
     </div>
