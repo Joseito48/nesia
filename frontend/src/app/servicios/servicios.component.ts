@@ -14,8 +14,8 @@ import { ReservaModalComponent } from '../reservas/reserva-modal/reserva-modal.c
 export class ServiciosComponent implements OnInit {
   servicios = signal<any[]>([]);
   
-  // 3. CAMBIO CLAVE: Usaremos una Signal para el modal también
-  servicioSeleccionado = signal<any>(null); 
+  servicioDetalle = signal<any>(null);
+  servicioReserva = signal<any>(null);
 
   constructor(private serviciosService: ServiciosService) {}
 
@@ -30,14 +30,21 @@ export class ServiciosComponent implements OnInit {
     });
   }
 
-  // 4. Función para abrir (con CHIVATO en consola)
-  abrirModal(servicio: any) {
-    console.log('CLICK RECIBIDO. Abriendo modal para:', servicio.title);
-    this.servicioSeleccionado.set(servicio); // Actualizamos la signal
+  abrirDetalle(servicio: any) {
+    this.servicioDetalle.set(servicio);
+    this.servicioReserva.set(null);
   }
 
-  // 5. Función para cerrar
-  cerrarModal() {
-    this.servicioSeleccionado.set(null);
+  cerrarDetalle() {
+    this.servicioDetalle.set(null);
+  }
+
+  abrirReserva(servicio: any) {
+    this.servicioReserva.set(servicio);
+    this.servicioDetalle.set(null);
+  }
+
+  cerrarReserva() {
+    this.servicioReserva.set(null);
   }
 }
