@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Component({
   selector: 'app-about',
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './about.components.html',
 })
 export class AboutComponent implements OnInit {
-  private http = inject(HttpClient);
+  private reviewsService = inject(ReviewsService);
 
   reviews: any[] = [];
   name = '';
@@ -24,7 +24,7 @@ export class AboutComponent implements OnInit {
   }
 
   loadReviews() {
-    this.http.get<any[]>('http://localhost:3000/reviews').subscribe({
+    this.reviewsService.getReviews().subscribe({
       next: (data) => this.reviews = data,
       error: () => this.message = 'No se pudieron cargar las reseñas en este momento.'
     });
@@ -37,7 +37,7 @@ export class AboutComponent implements OnInit {
     }
 
     this.submitting = true;
-    this.http.post('http://localhost:3000/reviews', {
+    this.reviewsService.createReview({
       name: this.name.trim(),
       comment: this.comment.trim(),
       rating: this.rating

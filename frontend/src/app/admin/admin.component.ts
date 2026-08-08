@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ReservasService } from '../reservas/reservas.service';
 import { ServiciosService } from '../servicios/servicios.service';
 import { GaleriaService } from '../galeria/galeria.service';
-import { HttpClient } from '@angular/common/http';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Component({
   selector: 'app-admin',
@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
   private reservasService = inject(ReservasService);
   private serviciosService = inject(ServiciosService);
   private galeriaService = inject(GaleriaService);
-  private http = inject(HttpClient);
+  private reviewsService = inject(ReviewsService);
 
   ngOnInit(): void {
     this.cargarReservas();
@@ -84,7 +84,7 @@ export class AdminComponent implements OnInit {
   }
 
   cargarReviews() {
-    this.http.get<any[]>('http://localhost:3000/reviews').subscribe({
+    this.reviewsService.getReviews().subscribe({
       next: (data) => this.reviews.set(data),
       error: (err) => console.error('Error al cargar reseñas:', err)
     });
@@ -123,7 +123,7 @@ export class AdminComponent implements OnInit {
 
   borrarReview(id: string) {
     if (confirm('¿Quieres eliminar esta reseña?')) {
-      this.http.delete(`http://localhost:3000/reviews/${id}`).subscribe({
+      this.reviewsService.deleteReview(id).subscribe({
         next: () => {
           alert('Reseña eliminada correctamente');
           this.cargarReviews();
